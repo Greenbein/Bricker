@@ -58,6 +58,8 @@ public class CollisionStrategyFactory {
                     return buildStrategyFactory(collisionStrategy, counterDouble + 1, counterStrategies + 1);
                 }
                 break;
+            default:
+                break;
         }
         return collisionStrategy;
     }
