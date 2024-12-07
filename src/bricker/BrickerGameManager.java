@@ -145,15 +145,15 @@ public class BrickerGameManager extends GameManager {
         if(rand.nextBoolean()){
             ballVelY *= -1;
         }
-        if(!isTurbo) {
-            ball.setVelocity(new Vector2(ballVelX, ballVelY));
-            ball.renderer().setRenderable(ballImage);
+        if(!this.isTurbo) {
+            this.ball.setVelocity(new Vector2(ballVelX, ballVelY));
+            this.ball.renderer().setRenderable(ballImage);
         }
         else{
-            ball.setVelocity(new Vector2(ballVelX, ballVelY).mult(1.4f));
-            ball.renderer().setRenderable(turboBallImage);
+            this.ball.setVelocity(new Vector2(ballVelX, ballVelY).mult(1.4f));
+            this.ball.renderer().setRenderable(turboBallImage);
         }
-        ball.setCenter(windowDimensions.mult(HALF));
+        this.ball.setCenter(windowDimensions.mult(HALF));
         this.gameObjects().addGameObject(ball);
     }
 
@@ -197,13 +197,13 @@ public class BrickerGameManager extends GameManager {
             default:
                 graphicHeartsCounter.setColor(Color.GREEN);
         }
-        heartsCounter = new GameObject
+        this.heartsCounter = new GameObject
                 (new Vector2(WALL_WIDTH + HEARTS_COUNTER_MARGIN,
                         this.windowDimensions.y()- HEART_SIZE - WALL_HEIGHT),
                         new Vector2(HEART_COUNTER_SIZE,HEART_COUNTER_SIZE),
                         graphicHeartsCounter
                 );
-        this.gameObjects().addGameObject(heartsCounter,Layer.UI);
+        this.gameObjects().addGameObject(this.heartsCounter,Layer.UI);
     }
 
     public void increaseAmountOfHearts() {
@@ -226,9 +226,9 @@ public class BrickerGameManager extends GameManager {
         GameObject heart = new Heart(
                 new Vector2(x, y),
                 new Vector2(HEART_SIZE,HEART_SIZE),
-                heartImage,
+                this.heartImage,
                 addingHeartStrategy,
-                userPaddle);
+                this.userPaddle);
         heart.setVelocity(Vector2.DOWN.mult(FALLING_HEART_SPEED));
         heart.setTag(ORIGINAL_PADDLE);
         this.gameObjects().addGameObject(heart);
@@ -262,7 +262,7 @@ public class BrickerGameManager extends GameManager {
 
     private void buildBricks(float amountOfBricksInRow,
                              float amountOfRows){
-        float screenWidth = windowDimensions.x();
+        float screenWidth = this.windowDimensions.x();
         float numberOfSpaces = (amountOfBricksInRow+1);
         float brickWidth = (screenWidth-
                 2*WALL_WIDTH-
@@ -275,7 +275,7 @@ public class BrickerGameManager extends GameManager {
                 CollisionStrategy strategy = factory.getCollisionStrategy();
                 GameObject brick = new Brick(new Vector2(startX,startY),
                         new Vector2(brickWidth,BRICK_HEIGHT),
-                        brickImage,
+                        this.brickImage,
                         strategy
                 );
                 //we have to use brick's tag in order to decrease the number of bricks, when we remove the brick from
@@ -324,12 +324,12 @@ public class BrickerGameManager extends GameManager {
 
     public void createExtraPaddle(){
         if(!this.extraPaddleExists){
-            UserPaddle extraPaddle = new AddPaddle(this.windowDimensions.mult(HALF),
+            UserPaddle extraPaddle = new AddPaddle(new Vector2(this.windowDimensions).mult(HALF),
                     new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),
-                    paddleImage,
-                    userInputListener,
-                    windowController.getWindowDimensions().x(),this);
-            extraPaddle.setCenter(new Vector2(windowDimensions.x(),windowDimensions.y()).mult(HALF));
+                    this.paddleImage,
+                    this.userInputListener,
+                    this.windowController.getWindowDimensions().x(),this);
+            extraPaddle.setCenter(new Vector2(this.windowDimensions).mult(HALF));
             gameObjects().addGameObject(extraPaddle);
             this.extraPaddleExists = true;
         }
@@ -347,13 +347,13 @@ public class BrickerGameManager extends GameManager {
     private void pressW(){
         if(this.userInputListener.isKeyPressed(KeyEvent.VK_W)) {
             String prompt = VICTORY+NEXT_GAME_QUESTION;
-            if(windowController.openYesNoDialog(prompt)){
+            if(this.windowController.openYesNoDialog(prompt)){
                 this.hearts = START_MAX_ATTEMPTS;
                 this.bricksCounter = new Counter((int)(this.userNumOfRows*this.userNumOfBricks));
-                windowController.resetGame();
+                this.windowController.resetGame();
             }
             else{
-                windowController.closeWindow();
+                this.windowController.closeWindow();
             }
 
         }
@@ -369,12 +369,11 @@ public class BrickerGameManager extends GameManager {
     public void checkForGameEnd() {
         float ballHeight = ball.getCenter().y();
         String prompt = EMPTY_STRING;
-        if(ballHeight>windowDimensions.y()){
+        if(ballHeight>this.windowDimensions.y()){
             //we lost
             if(this.hearts>1){
                 this.hearts--;
-                ball.setCenter(new Vector2(this.windowDimensions.x(),
-                        this.windowDimensions.y()).mult(HALF));
+                this.ball.setCenter(new Vector2(this.windowDimensions).mult(HALF));
                 spawnBall();
             }
             else{
@@ -386,13 +385,13 @@ public class BrickerGameManager extends GameManager {
         }
         if(!prompt.isEmpty()){
             prompt += NEXT_GAME_QUESTION;
-            if(windowController.openYesNoDialog(prompt)){
+            if(this.windowController.openYesNoDialog(prompt)){
                 this.hearts = START_MAX_ATTEMPTS;
                 this.bricksCounter = new Counter((int)(this.userNumOfRows*this.userNumOfBricks));
-                windowController.resetGame();
+                this.windowController.resetGame();
             }
             else{
-                windowController.closeWindow();
+                this.windowController.closeWindow();
             }
         }
     }
@@ -406,19 +405,19 @@ public class BrickerGameManager extends GameManager {
 
     public void onTurbo(){
         if(!isTurbo) {
-            ball.setCollisionCounter(0);
-            isTurbo = true;
-            ball.setVelocity(ball.getVelocity().mult(TURBO_BALL_SPEED_FACTOR));
-            ball.renderer().setRenderable(turboBallImage);
+            this.ball.setCollisionCounter(0);
+            this.isTurbo = true;
+            this.ball.setVelocity(ball.getVelocity().mult(TURBO_BALL_SPEED_FACTOR));
+            this.ball.renderer().setRenderable(turboBallImage);
         }
     }
 
     public void offTurbo(){
         if(isTurbo && ball.getCollisionCounter()>=6){
-            isTurbo = false;
-            ball.setCollisionCounter(0);
-            ball.setVelocity(ball.getVelocity().mult(1/TURBO_BALL_SPEED_FACTOR));
-            ball.renderer().setRenderable(ballImage);
+            this.isTurbo = false;
+            this.ball.setCollisionCounter(0);
+            this.ball.setVelocity(ball.getVelocity().mult(1/TURBO_BALL_SPEED_FACTOR));
+            this.ball.renderer().setRenderable(ballImage);
         }
     }
 
