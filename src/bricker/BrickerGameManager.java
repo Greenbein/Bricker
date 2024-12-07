@@ -92,7 +92,7 @@ public class BrickerGameManager extends GameManager {
         //Creating ball
         ball = new Ball(Vector2.ZERO,
                 new Vector2(DEFAULT_BALL_SIZE,DEFAULT_BALL_SIZE),
-                ballImage,collisionSound, this);
+                ballImage,collisionSound);
         ball.setTag(MAIN_BALL_TAG);
         isTurbo = false;
         spawnBall();
@@ -306,7 +306,7 @@ public class BrickerGameManager extends GameManager {
         for(int i =0;i<PUCK_BALLS_AMOUNT_AFTER_COLLISION;i++){
             Ball puck = new Ball(new Vector2(x,y),
                     new Vector2(DEFAULT_BALL_SIZE,DEFAULT_BALL_SIZE).mult(PUCK_BALL_SPEED_FACTOR),
-                    puckImage, collisionSound,this);
+                    puckImage, collisionSound);
             puck.setTag(PUCK_BALL_TAG);
             double angle = rand.nextDouble()*Math.PI;
             float velocityX = (float)Math.cos(angle)*BALL_SPEED;

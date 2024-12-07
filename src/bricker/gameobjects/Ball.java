@@ -1,6 +1,5 @@
 package bricker.gameobjects;
 
-import bricker.BrickerGameManager;
 import danogl.GameObject;
 import danogl.collisions.Collision;
 import danogl.gui.Sound;
@@ -21,7 +20,7 @@ public class Ball extends GameObject {
      *                      the GameObject will not be rendered.
      */
     public Ball(Vector2 topLeftCorner, Vector2 dimensions,
-                Renderable renderable, Sound collisionSound, BrickerGameManager brickerGameManager) {
+                Renderable renderable, Sound collisionSound) {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
         this.collisionCounter = 0;
