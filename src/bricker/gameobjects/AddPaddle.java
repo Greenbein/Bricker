@@ -21,6 +21,7 @@ public class AddPaddle extends UserPaddle {
      *                      the GameObject will not be rendered.
      * @param inputListener
      * @param screenWidth
+     * @param screenWidth
      */
     public AddPaddle(Vector2 topLeftCorner, Vector2 dimensions,
                      Renderable renderable, UserInputListener inputListener,

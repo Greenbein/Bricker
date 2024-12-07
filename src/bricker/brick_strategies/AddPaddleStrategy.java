@@ -12,6 +12,5 @@ public class AddPaddleStrategy extends SpecialCollisionStrategy{
     public void onCollision(GameObject one, GameObject two) {
         collisionStrategy().onCollision(one, two);
         brickerGameManager().createExtraPaddle();
-        //brickerGameManager().removeObject(one, Layer.STATIC_OBJECTS);
     }
 }

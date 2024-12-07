@@ -35,13 +35,7 @@ public class Ball extends GameObject {
         super.onCollisionEnter(other, collision);
         Vector2 newVel = getVelocity().flipped(collision.getNormal());
         setVelocity(newVel);
-        //if(other.getTag().equals("brick")){
-            collisionSound.play();
-        //}
-        if(brickerGameManager.isTurbo){
-            System.out.println(collisionCounter);
-        }
-        //collisionSound.play();
+        collisionSound.play();
         this.collisionCounter++;
     }
     public void setCollisionCounter(int collisionCounter) {

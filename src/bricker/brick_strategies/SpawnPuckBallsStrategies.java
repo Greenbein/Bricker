@@ -9,7 +9,6 @@ public class SpawnPuckBallsStrategies extends SpecialCollisionStrategy{
     @Override
     public void onCollision(GameObject one, GameObject two) {
         collisionStrategy().onCollision(one, two);
-        //brickerGameManager().removeObject(one, Layer.STATIC_OBJECTS);
         brickerGameManager().spawnPuckBalls(one.getCenter().x(),one.getCenter().y());
     }
 }

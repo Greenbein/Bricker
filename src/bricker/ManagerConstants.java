@@ -35,7 +35,13 @@ public class ManagerConstants {
     public static final String RED_BALL_DIR = "redball.png";
     public static final String MAIN_BALL_TAG = "main_ball";
     public static final String PUCK_BALL_TAG = "puck_ball";
-    public static final String COLLISION_MONKEY = "donkey_2.wav";
+    public static final String COLLISION_DONKEY = "donkey_2.wav";
+    public static final float PADDLE_WIDTH = 100;
+    public static final float PADDLE_HEIGHT = 15;
+    public static final float HALF = (float)0.5;
+    public static final float PUCK_BALL_SPEED_FACTOR = 0.75f;
+    public static final float PUCK_BALLS_AMOUNT_AFTER_COLLISION = 2;
+    public static final float TURBO_BALL_SPEED_FACTOR = 1.4f;
 
 
 }

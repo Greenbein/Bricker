@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 import static bricker.ManagerConstants.*;
-import bricker.gameobjects.*;
 
 
 public class BrickerGameManager extends GameManager {
@@ -26,11 +25,11 @@ public class BrickerGameManager extends GameManager {
     private Renderable brickImage;
     private Renderable heartImage;
     private Renderable paddleImage;
-    private Renderable backgroundImage;
     private Renderable ballImage;
     private Renderable puckImage;
     private Renderable turboBallImage;
-    private GameObject heartsCounter, userPaddle;
+    private GameObject heartsCounter;
+    private GameObject userPaddle;
     private GameObject[] heartsBarArray;
     private final float userNumOfRows;
     private final float userNumOfBricks;
@@ -41,7 +40,7 @@ public class BrickerGameManager extends GameManager {
     private UserInputListener userInputListener;
     private  Sound collisionSound;
     private boolean extraPaddleExists;
-    public boolean isTurbo;
+    private boolean isTurbo;
 
 
     public BrickerGameManager(String windowTitle, Vector2 windowDimensions) {
@@ -81,17 +80,16 @@ public class BrickerGameManager extends GameManager {
         this.windowDimensions = windowController.getWindowDimensions();
         windowController.setTargetFramerate(70);
 
-        //Creating ball
+        Renderable backgroundImage = imageReader.readImage(ASSETS_DIR+BACKGROUND_DIR,false);
         collisionSound = soundReader.readSound(ASSETS_DIR+COLLISION_SOUND_DIR);
-        //collisionSound = soundReader.readSound(ASSETS_DIR+COLLISION_MONKEY);
         ballImage = imageReader.readImage(ASSETS_DIR+BALL_DIR,true);
         brickImage = imageReader.readImage(ASSETS_DIR+BRICK_DIR, true);
         heartImage = imageReader.readImage(ASSETS_DIR+HEART_DIR, true);
         paddleImage = imageReader.readImage(ASSETS_DIR+PADDLE_DIR,true);
-        backgroundImage = imageReader.readImage(ASSETS_DIR+BACKGROUND_DIR,false);
         puckImage = imageReader.readImage(ASSETS_DIR+MOCK_BALL_DIR,true);
         turboBallImage = imageReader.readImage(ASSETS_DIR+RED_BALL_DIR,true);
 
+        //Creating ball
         ball = new Ball(Vector2.ZERO,
                 new Vector2(DEFAULT_BALL_SIZE,DEFAULT_BALL_SIZE),
                 ballImage,collisionSound, this);
@@ -135,7 +133,6 @@ public class BrickerGameManager extends GameManager {
         createHeartsBar();
         deleteObjectsOutOfFrame();
         offTurbo();
-        //System.out.println("Ball's collision counter: "+ball.getCollisionCounter());
     }
 
     private void spawnBall(){
@@ -156,7 +153,7 @@ public class BrickerGameManager extends GameManager {
             ball.setVelocity(new Vector2(ballVelX, ballVelY).mult(1.4f));
             ball.renderer().setRenderable(turboBallImage);
         }
-        ball.setCenter(windowDimensions.mult(0.5f));
+        ball.setCenter(windowDimensions.mult(HALF));
         this.gameObjects().addGameObject(ball);
     }
 
@@ -188,8 +185,7 @@ public class BrickerGameManager extends GameManager {
 
     // this function implements the counter of the hearts graphically
     private void createHeartsCounter(){
-        boolean deleted =  gameObjects().removeGameObject(heartsCounter,Layer.UI);
-
+        gameObjects().removeGameObject(heartsCounter,Layer.UI);
         TextRenderable graphicHeartsCounter = new TextRenderable(String.valueOf(this.hearts));
         switch(this.hearts){
             case 1:
@@ -217,9 +213,9 @@ public class BrickerGameManager extends GameManager {
     }
 
     private void deleteHeartsBar(){
-        for(int i = 0;i<this.heartsBarArray.length;i++){
-            if(this.heartsBarArray[i]!=null){
-                this.gameObjects().removeGameObject(this.heartsBarArray[i],Layer.UI);
+        for (GameObject gameObject : this.heartsBarArray) {
+            if (gameObject != null) {
+                this.gameObjects().removeGameObject(gameObject, Layer.UI);
             }
         }
     }
@@ -272,7 +268,6 @@ public class BrickerGameManager extends GameManager {
                 2*WALL_WIDTH-
                 numberOfSpaces*SPACE_BETWEEN_BRICKS) /amountOfBricksInRow;
         CollisionStrategyFactory factory = new CollisionStrategyFactory(this);
-        //CollisionStrategy basicCollisionStrategy = new BasicCollisionStrategy(this);
         float startY = 2*WALL_WIDTH;
         for(int row = 0;row<amountOfRows;row++){
             float startX = WALL_WIDTH+SPACE_BETWEEN_BRICKS;
@@ -289,7 +284,7 @@ public class BrickerGameManager extends GameManager {
                 this.gameObjects().addGameObject(brick,Layer.STATIC_OBJECTS);
                 startX+=brickWidth+SPACE_BETWEEN_BRICKS;
             }
-            startY+=SPACE_BETWEEN_BRICKS*5;
+            startY+=BRICK_HEIGHT+SPACE_BETWEEN_BRICKS;
         }
     }
 
@@ -308,9 +303,9 @@ public class BrickerGameManager extends GameManager {
 
     public void spawnPuckBalls(float x, float y){
         Random rand = new Random();
-        for(int i =0;i<2;i++){
+        for(int i =0;i<PUCK_BALLS_AMOUNT_AFTER_COLLISION;i++){
             Ball puck = new Ball(new Vector2(x,y),
-                    new Vector2((float)(DEFAULT_BALL_SIZE*0.75),(float)(DEFAULT_BALL_SIZE*0.75)),
+                    new Vector2(DEFAULT_BALL_SIZE,DEFAULT_BALL_SIZE).mult(PUCK_BALL_SPEED_FACTOR),
                     puckImage, collisionSound,this);
             puck.setTag(PUCK_BALL_TAG);
             double angle = rand.nextDouble()*Math.PI;
@@ -329,11 +324,12 @@ public class BrickerGameManager extends GameManager {
 
     public void createExtraPaddle(){
         if(!this.extraPaddleExists){
-            UserPaddle extraPaddle = new AddPaddle(this.windowDimensions.mult(1/2),new Vector2(100,15),
+            UserPaddle extraPaddle = new AddPaddle(this.windowDimensions.mult(HALF),
+                    new Vector2(PADDLE_WIDTH,PADDLE_HEIGHT),
                     paddleImage,
                     userInputListener,
                     windowController.getWindowDimensions().x(),this);
-            extraPaddle.setCenter(new Vector2(windowDimensions.x()/2,windowDimensions.y()/2));
+            extraPaddle.setCenter(new Vector2(windowDimensions.x(),windowDimensions.y()).mult(HALF));
             gameObjects().addGameObject(extraPaddle);
             this.extraPaddleExists = true;
         }
@@ -377,8 +373,8 @@ public class BrickerGameManager extends GameManager {
             //we lost
             if(this.hearts>1){
                 this.hearts--;
-                ball.setCenter(new Vector2(this.windowDimensions.x()/2,
-                        this.windowDimensions.y()/2));
+                ball.setCenter(new Vector2(this.windowDimensions.x(),
+                        this.windowDimensions.y()).mult(HALF));
                 spawnBall();
             }
             else{
@@ -386,7 +382,6 @@ public class BrickerGameManager extends GameManager {
             }
         }
         else if(this.bricksCounter.value() == 0){
-            System.out.println("You have won!!!!!");
             prompt = VICTORY;
         }
         if(!prompt.isEmpty()){
@@ -413,7 +408,7 @@ public class BrickerGameManager extends GameManager {
         if(!isTurbo) {
             ball.setCollisionCounter(0);
             isTurbo = true;
-            ball.setVelocity(ball.getVelocity().mult(1.4f));
+            ball.setVelocity(ball.getVelocity().mult(TURBO_BALL_SPEED_FACTOR));
             ball.renderer().setRenderable(turboBallImage);
         }
     }
@@ -422,7 +417,7 @@ public class BrickerGameManager extends GameManager {
         if(isTurbo && ball.getCollisionCounter()>=6){
             isTurbo = false;
             ball.setCollisionCounter(0);
-            ball.setVelocity(ball.getVelocity().mult(1/1.4f));
+            ball.setVelocity(ball.getVelocity().mult(1/TURBO_BALL_SPEED_FACTOR));
             ball.renderer().setRenderable(ballImage);
         }
     }
@@ -436,12 +431,12 @@ public class BrickerGameManager extends GameManager {
 
 
     public void removeObject(GameObject object, int layerLevel){
+        String tag = object.getTag();
         boolean deleted = this.gameObjects().removeGameObject(object,layerLevel);
-        if(object.getTag().equals(BRICK_TAG)){
-            if(deleted){
+        if(tag.equals(BRICK_TAG) && deleted){
                 this.reduceAmountOfBricks();
             }
-        }
+
     }
 
     private boolean isObjectOutOfFrame(GameObject gameObject){
@@ -468,9 +463,7 @@ public class BrickerGameManager extends GameManager {
     public Vector2 getWindowDimensions(){
         return this.windowDimensions;
     }
-//    public boolean getIsTurbo(){
-//        return this.isTurbo;
-//    }
+
 
     public static void main(String[] args) {
         BrickerGameManager g = null;

@@ -43,7 +43,6 @@ public class UserPaddle extends GameObject {
      * @param renderable    The renderable representing the object. Can be null, in which case
      *                      the GameObject will not be rendered.
      * @param inputListener
-     * @param x
      */
     public UserPaddle(Vector2 topLeftCorner,
                       Vector2 dimensions,
