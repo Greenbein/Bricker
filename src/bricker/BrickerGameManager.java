@@ -167,7 +167,7 @@ public class BrickerGameManager extends GameManager {
     private void createHeartsBar(){
         deleteHeartsBar();
         HeartCollisionStrategy basicCollisionStrategy =
-                new StaticHeartStrategy(this);
+                new StaticHeartStrategy();
         float startX = WALL_WIDTH + HEARTS_COUNTER_MARGIN*2 + HEART_COUNTER_SIZE;
         for(int i =0; i<this.hearts; i++){
             GameObject heart = new Heart(
