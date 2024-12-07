@@ -2,7 +2,7 @@ package bricker;
 
 public class ManagerConstants {
     private ManagerConstants() {}
-    public static final float BALL_SPEED = 300;
+    public static final float BALL_SPEED = 150;
     public static final float DEFAULT_BALL_SIZE = 20;
     public static final float WALL_WIDTH = 20;
     public static final float WALL_HEIGHT = 20;
@@ -12,8 +12,8 @@ public class ManagerConstants {
     public static final float HEARTS_COUNTER_MARGIN = 5;
     public static final float SPACE_BETWEEN_BRICKS= 5;
     public static final float BRICK_HEIGHT = 15;
-    public static final float DEFAULT_BRICKS_AMOUNT = 5;
-    public static final float DEFAULT_ROWS_AMOUNT = 5;
+    public static final float DEFAULT_BRICKS_AMOUNT = 2;
+    public static final float DEFAULT_ROWS_AMOUNT = 1;
     public static final int START_MAX_ATTEMPTS = 3;
     public static final int MAX_ATTEMPTS = 4;
     public static final String VICTORY = "You win!";

@@ -10,7 +10,7 @@ import static bricker.ManagerConstants.WALL_WIDTH;
 
 public class UserPaddle extends GameObject {
 
-    private static final float MOVEMENT_SPEED = 300;
+    private static final float MOVEMENT_SPEED = 500;
     private final UserInputListener inputListener;
     private final float screenWidth;
 
