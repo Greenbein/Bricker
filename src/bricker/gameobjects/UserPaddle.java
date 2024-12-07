@@ -6,8 +6,6 @@ import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
 
 import java.awt.event.KeyEvent;
-import bricker.ManagerConstants;
-
 import static bricker.ManagerConstants.WALL_WIDTH;
 
 public class UserPaddle extends GameObject {
@@ -21,16 +19,14 @@ public class UserPaddle extends GameObject {
         super.update(deltaTime);
         Vector2 movementDir = Vector2.ZERO;
 
-        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT)) {
-            if(this.getTopLeftCorner().x()>0+WALL_WIDTH){
+        if(inputListener.isKeyPressed(KeyEvent.VK_LEFT) && this.getTopLeftCorner().x()>0+WALL_WIDTH){
                 movementDir = movementDir.add(Vector2.LEFT);
             }
-        }
-        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT)) {
-            if(this.getTopLeftCorner().x()+this.getDimensions().x()<this.screenWidth-WALL_WIDTH){
+
+        if(inputListener.isKeyPressed(KeyEvent.VK_RIGHT) && this.getTopLeftCorner().x()+this.getDimensions().x()<this.screenWidth-WALL_WIDTH){
                 movementDir = movementDir.add(Vector2.RIGHT);
             }
-        }
+
         setVelocity(movementDir.mult(MOVEMENT_SPEED));
     }
 
@@ -42,7 +38,6 @@ public class UserPaddle extends GameObject {
      * @param dimensions    Width and height in window coordinates.
      * @param renderable    The renderable representing the object. Can be null, in which case
      *                      the GameObject will not be rendered.
-     * @param inputListener
      */
     public UserPaddle(Vector2 topLeftCorner,
                       Vector2 dimensions,

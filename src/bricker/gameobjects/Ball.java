@@ -6,12 +6,10 @@ import danogl.collisions.Collision;
 import danogl.gui.Sound;
 import danogl.gui.rendering.Renderable;
 import danogl.util.Vector2;
-import static bricker.ManagerConstants.*;
 
 public class Ball extends GameObject {
     private final Sound collisionSound;
     private int collisionCounter;
-    private BrickerGameManager brickerGameManager;
 
     /**
      * Construct a new GameObject instance.
@@ -27,7 +25,6 @@ public class Ball extends GameObject {
         super(topLeftCorner, dimensions, renderable);
         this.collisionSound = collisionSound;
         this.collisionCounter = 0;
-        this.brickerGameManager = brickerGameManager;
     }
 
     @Override

@@ -1,8 +1,7 @@
 package bricker;
 
 public class ManagerConstants {
-    public ManagerConstants() {}
-
+    private ManagerConstants() {}
     public static final float BALL_SPEED = 150;
     public static final float DEFAULT_BALL_SIZE = 20;
     public static final float WALL_WIDTH = 20;
@@ -38,10 +37,8 @@ public class ManagerConstants {
     public static final String COLLISION_DONKEY = "donkey_2.wav";
     public static final float PADDLE_WIDTH = 100;
     public static final float PADDLE_HEIGHT = 15;
-    public static final float HALF = (float)0.5;
+    public static final float HALF = 0.5f;
     public static final float PUCK_BALL_SPEED_FACTOR = 0.75f;
     public static final float PUCK_BALLS_AMOUNT_AFTER_COLLISION = 2;
     public static final float TURBO_BALL_SPEED_FACTOR = 1.4f;
-
-
 }
