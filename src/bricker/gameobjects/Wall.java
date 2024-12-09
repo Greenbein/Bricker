@@ -6,7 +6,7 @@ import danogl.util.Vector2;
 
 public class Wall extends GameObject {
     /**
-     * Construct a new GameObject instance.
+     * Construct a new wall
      *
      * @param topLeftCorner Position of the object, in window coordinates (pixels).
      *                      Note that (0,0) is the top-left corner of the window.

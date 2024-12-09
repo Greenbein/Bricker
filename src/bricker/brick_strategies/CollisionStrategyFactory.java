@@ -1,6 +1,6 @@
 package bricker.brick_strategies;
 
-import bricker.BrickerGameManager;
+import bricker.main.BrickerGameManager;
 
 import java.util.Random;
 
@@ -15,11 +15,21 @@ public class CollisionStrategyFactory {
 
     private final Random rand;
 
+    /**
+     * Constructor for CollisionStrategyFactory
+     * @param brickerGameManager - game manager of bricker
+     */
     public CollisionStrategyFactory(BrickerGameManager brickerGameManager) {
         this.brickerGameManager = brickerGameManager;
         this.rand = new Random();
     }
 
+    /**
+     * At first, the method chooses a random number from [0,1]
+     * 50% probability to get BasicCollision and finish
+     * 50% probability to get SpecialCollision and pass to buildStrategyFactory method
+     * @return Collision of the object
+     */
     public CollisionStrategy getCollisionStrategy() {
         CollisionStrategy basic = new BasicCollisionStrategy(brickerGameManager);
         int isBasic = rand.nextInt(2);
@@ -29,6 +39,10 @@ public class CollisionStrategyFactory {
         return buildStrategyFactory(basic, 0, 1);
     }
 
+    //here we use factory in order to build our Special Collision
+    //if we get a number [0,1,2,3], then we choose one of 4 regular SpecialCollision types and finish
+    //else we build our collision in a recursive way (DOUBLE)
+    //there can be only 3 different Special Collisions. It occurs only when we choose DOUBLE two times
     private CollisionStrategy buildStrategyFactory(CollisionStrategy collisionStrategy,
                                                    int counterDouble,
                                                    int counterStrategies) {
@@ -58,10 +72,7 @@ public class CollisionStrategyFactory {
                     return buildStrategyFactory(collisionStrategy, counterDouble + 1, counterStrategies + 1);
                 }
                 break;
-            default:
-
-                break;
         }
-        return collisionStrategy;
+        return buildStrategyFactory(collisionStrategy,counterDouble, counterStrategies);
     }
 }

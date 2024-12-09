@@ -29,11 +29,24 @@ public class Heart extends GameObject {
         this.heartShouldCollideWith = heartShouldCollideWith;
     }
 
+    /**
+     * Use heart collision strategy in case of collision
+     * @param other The GameObject with which a collision occurred.
+     * @param collision Information regarding this collision.
+     *                  A reasonable elastic behavior can be achieved with:
+     *                  setVelocity(getVelocity().flipped(collision.getNormal()));
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         this.heartCollisionStrategy.onCollision(this, other);
     }
 
+    /**
+     * Check what objects can be in collision with the heart
+     * We do it by tag verifying
+     * @param other The other GameObject.
+     * @return
+     */
     @Override
     public boolean shouldCollideWith(GameObject other) {
         return other.getTag().equals(this.heartShouldCollideWith.getTag());

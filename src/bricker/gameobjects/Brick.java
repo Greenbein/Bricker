@@ -23,6 +23,14 @@ public class Brick extends GameObject {
         this.collisionStrategy = collisionStrategy;
     }
 
+    /**
+     * If bricks collide with some object, then we use their strategies
+     * the strategy can basic or special(can be single or double or triple)
+     * @param other The GameObject with which a collision occurred.
+     * @param collision Information regarding this collision.
+     *                  A reasonable elastic behavior can be achieved with:
+     *                  setVelocity(getVelocity().flipped(collision.getNormal()));
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         this.collisionStrategy.onCollision(this, other);

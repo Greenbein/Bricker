@@ -26,6 +26,16 @@ public class Ball extends GameObject {
         this.collisionCounter = 0;
     }
 
+    /**
+     * If we are in collision with other object we have to:
+     * 1.increase ball's collision amount
+     * 2.Play collision sound
+     * 3.Create random velocity vector
+     * @param other The GameObject with which a collision occurred.
+     * @param collision Information regarding this collision.
+     *                  A reasonable elastic behavior can be achieved with:
+     *                  setVelocity(getVelocity().flipped(collision.getNormal()));
+     */
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
@@ -34,9 +44,19 @@ public class Ball extends GameObject {
         collisionSound.play();
         this.collisionCounter++;
     }
+
+    /**
+     * Update collision counter
+     * @param collisionCounter - amount of ball collisions with objects
+     */
     public void setCollisionCounter(int collisionCounter) {
         this.collisionCounter = collisionCounter;
     }
+
+    /**
+     * get ball's collision counter
+     * @return collisionCounter value
+     */
     public int getCollisionCounter() {
         return this.collisionCounter;
     }

@@ -1,5 +1,8 @@
-package bricker;
-
+package bricker.main;
+/*
+this package has all of our constants that we use in brickerGameManager.
+we have done that to make the code more readable.
+ */
 public class ManagerConstants {
     private ManagerConstants() {}
     public static final float BALL_SPEED = 150;
@@ -12,8 +15,8 @@ public class ManagerConstants {
     public static final float HEARTS_COUNTER_MARGIN = 5;
     public static final float SPACE_BETWEEN_BRICKS= 5;
     public static final float BRICK_HEIGHT = 15;
-    public static final float DEFAULT_BRICKS_AMOUNT = 2;
-    public static final float DEFAULT_ROWS_AMOUNT = 1;
+    public static final float DEFAULT_BRICKS_AMOUNT = 8;
+    public static final float DEFAULT_ROWS_AMOUNT = 7;
     public static final int START_MAX_ATTEMPTS = 3;
     public static final int MAX_ATTEMPTS = 4;
     public static final String VICTORY = "You win!";
@@ -41,4 +44,9 @@ public class ManagerConstants {
     public static final float PUCK_BALL_SPEED_FACTOR = 0.75f;
     public static final float PUCK_BALLS_AMOUNT_AFTER_COLLISION = 2;
     public static final float TURBO_BALL_SPEED_FACTOR = 1.4f;
+    public static final float SCREEN_WIDTH = 700;
+    public static final float SCREEN_HEIGHT = 500;
+    public static final String GAME_NAME = "Bricker";
+    public static final int PARAMETERS_AMOUNT = 2;
+    public static final int FPS = 70;
 }
