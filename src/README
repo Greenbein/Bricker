@@ -1,0 +1,97 @@
+lior.grinbein,guy04
+345478184,214964777
+
+1. The design we chose in section 1.7 to remove bricks from the game was as follows:
+ Wedecided to move the whole responsibility for adding and removing elements only in
+ BrickerGameManager class. To implement this, we can pass an instance of
+ BrickerGameManager to the constructor of BasicCollisionStrategy. This instance will be
+ stored as a field, and we will use the public methods of BrickerGameManager to remove
+ the first parameter in the onCollision method. In this case, it will naturally be necessary
+ to add appropriate public methods to the BrickerGameManager class as needed.
+ First of all this approach preserves encapsulation. By doing so, BrickerGameManager
+ remains responsible for adding and removing objects, while BasicCollisionStrategy is
+ responsible for handling the collision strategy for bricks. The alternative way is removing
+ elements directly in BasicCollisionStrategy, and this would break encapsulation.
+ Furthermore, this approach ensures that BrickerGameManager remains the central
+ authority for managing the overall game. This leads to a maintainable design, where
+ extending the game’s functionality is easier. Changes to the core management class
+ BrickerGameManager can be made without affecting other parts of the code
+ unnecessarily.
+ However, the downside of this implementation is the need to extend the API of
+ BrickerGameManager, which may make the class harder to read and maintain.
+ 2. The way we implemented the graphical and numerical display of the player's life count
+ in section 1.8 of the exercise was as follows:
+ First of all we wrote the interface HeartCollisionStrategy to define the behavior of hearts
+ in the game. For the static heart displayed on the screen, we implemented the class
+ StaticHeartStrategy, which handles the behavior of a static, non-collidable heart. We
+ also created a Heart class as a GameObject, which accepts a heart collision strategy in
+ its constructor. This strategy differentiates between a falling heart and a static heart
+ displayed on the screen, along with the graphical implementation of the heart.
+ In the BrickerGameManager, we added two methods:
+ ● createHeartBar: This method graphically creates the bar that displays the
+ remaining heart count.
+ ● createHeartsCounter: This method graphically generates a counter that keeps
+ track of how many hearts are currently displayed on the screen.
+ 3. To handle special behaviors, we created a class for each behavior. All these classes
+ inherit from the class SpecialCollisionStrategy, which is an abstract class. This base
+class includes a shared collisionStrategy for all behaviors and a reference to the
+ BrickerGameManager. Each special behavior class extends the basic behavior of
+ removing a brick while also including an instance of BrickerGameManager.
+ Adding a Second Paddle :
+ Wecreated the class RecoverHeartStrategies, which in its constructor inherits the basic
+ collision behavior for bricks and accepts an instance of BrickerGameManager. This class
+ overrides the default onCollision method and uses the createExtraPaddle method from
+ BrickerGameManager to execute the strategy. Additionally, we created an ExtraPaddle
+ class, which extends the Paddle class. The purpose of ExtraPaddle is to ensure it is
+ removed after four collisions.
+ Implementing a Falling Heart:
+ For the falling heart, we created the class RecoverHeartStrategies. Its constructor
+ inherits the basic collision behavior for bricks and accepts an instance of
+ BrickerGameManager. It overrides the default onCollision method and utilizes the
+ createFallingHearts method from BrickerGameManager to execute this strategy. As
+ mentioned earlier, we also implemented an interface to differentiate between a falling
+ heart and a static heart.
+ Spawning Two Puck Balls:
+ To summon two puck balls, we created the class SpawnPuckBallsStrategies. This class,
+ in its constructor, inherits the basic collision behavior for bricks and accepts an instance
+ of BrickerGameManager. It overrides the default onCollision method and uses the
+ spawnPuckBalls method from BrickerGameManager to implement the strategy. We use
+ the class Ball to create the puck balls.
+ Turbo Activation:
+ For turbo functionality, we created the class SpawnPuckBallsStrategies, with additional
+ logic in its onCollision method. If the ball colliding with the brick is the main ball, the turbo
+ is activated, Otherwise, turbo activation is skipped. The onTurbo method, located in
+ BrickerGameManager, is responsible for executing the turbo behavior. Additionally, we
+ used the default onCollision method of the parent class to remove the brick.
+ To support this functionality, we extended the Ball class's API to include methods for
+ tracking the turbo state, ensuring proper management within the Ball class.
+ 4.For all breaking brick behavior classes, we created a CollisionStrategyFactory that
+ selects a random strategy for each brick. This factory implements the logic for managing
+ double collision behaviors. We keep a variable, counterDouble, which tracks how many
+ times a double behavior has been applied to a particular brick.
+ The factory has a recursive method buildStrategyFactory, which accepts a collision
+ behavior, a counter for double behaviors, and a counter for the total number of
+ strategies. Each time a double behavior is selected, the double behavior counter is
+ incremented and the total number of strategies incremented . There is a condition that
+ ensures that if the double behavior counter is less than two, it can be incremented, and
+the method is called recursively. Otherwise, the counter is not incremented, and the
+ method is called recursively without modifying the counters. This mechanism ensures
+ that no more than two double behaviors are assigned.
+ The strategy counter starts at 1. Each time a double behavior is implemented, this
+ counter is incremented by 1. Conversely, whenever a non-double strategy is
+ implemented, the counter is decremented by 1, and the method is called recursively.
+ 5.We added two methods, getCollisionCounter and setCollisionCounter, to the Ball class
+ API. The reason for extending the API was to avoid creating a separate class for a
+ TurboBall, as it is meant to represent the same ball with different properties, such as
+ speed and appearance.
+ The BrickerGameManager is responsible for dynamically modifying the ball's properties
+ based on the number of collisions. Each time the ball turns red, we decrement its
+ collisionsCounter until it is no longer greater than or equal to 5. To achieve this, we use
+ the getCollisionCounter method.
+ After 5 collisions, the ball reverts to its normal state, and we reset its collisionsCounter to
+ 0. This ensures that if the ball turns red again, the collision count begins from zero,
+ enabling consistent behavior. The reset is handled using the setCollisionCounter
+ method.
+ This design keeps the ball's logic contained within the Ball class while allowing
+ BrickerGameManager to manage game dynamics efficiently without duplicating
+ functionality
