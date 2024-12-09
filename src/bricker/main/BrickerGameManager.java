@@ -182,7 +182,7 @@ public class BrickerGameManager extends GameManager {
                 this.windowDimensions,backgroundImage);
         gameObjects().addGameObject(background, Layer.BACKGROUND);
     }
-
+    //commit temp
     /**
      *  update game every window time of delta
      * @param deltaTime The time, in seconds, that passed since the last invocation
